@@ -1,0 +1,16 @@
+{
+    "parent" : "engine:iconItem",
+    "Item" : {
+        "name" : "Spawn TCN mob",
+        "icon" : "engine:items.buildBlockJob",
+		"usage" : "ON_BLOCK"
+    },
+  	"PlaySoundAction" : {
+    	sounds = "engine:click"
+  	},
+  	"SpawnTool" : {
+        prefabs = ["ant", "frog", "alosaurus"],
+        spawn = 1,
+        max = 10
+  	}
+}

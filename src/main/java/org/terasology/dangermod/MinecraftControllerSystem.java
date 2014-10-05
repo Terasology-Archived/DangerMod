@@ -15,29 +15,63 @@
  */
 package org.terasology.dangermod;
 
+import com.google.common.collect.Maps;
 import net.minecraft.client.model.ModelBase;
 import org.terasology.asset.AssetManager;
 import org.terasology.asset.AssetType;
 import org.terasology.asset.AssetUri;
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.entity.lifecycleEvents.OnActivatedComponent;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.logic.debug.DebugPropertiesSystem;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.registry.CoreRegistry;
 import org.terasology.registry.In;
 import org.terasology.rendering.assets.skeletalmesh.SkeletalMesh;
 import org.terasology.rendering.assets.skeletalmesh.SkeletalMeshData;
 import org.terasology.rendering.logic.SkeletalMeshComponent;
+import org.terasology.rendering.nui.layouts.PropertyLayout;
+import org.terasology.rendering.nui.properties.Range;
+
+import java.util.Map;
 
 
 /**
  * @author synopia
  */
 @RegisterSystem
-public class MinecraftControllerSystem extends BaseComponentSystem {
+public class MinecraftControllerSystem extends BaseComponentSystem implements UpdateSubscriberSystem {
     @In
     AssetManager assetManager;
+    @In
+    EntityManager entityManager;
+
+    private Map<EntityRef, ModelBase> models = Maps.newHashMap();
+
+    private PropertyLayout properties;
+
+    @Range(min = 0, max = 40, precision = 1)
+    private float time;
+    @Range(min = 0, max = 1, precision = 3)
+    private float walkspeed;
+    @Range(min = 0, max = 40, precision = 1)
+    private float data;
+
+    @Range(min = 0, max = 360, precision = 1)
+    private float yaw;
+    @Range(min = 0, max = 360, precision = 1)
+    private float pitch;
+    @Range
+    private float scale;
+
+    @Override
+    public void preBegin() {
+        CoreRegistry.get(DebugPropertiesSystem.class).addProperty("MCS", this);
+    }
 
     @ReceiveEvent(components = {MinecraftControllerComponent.class, LocationComponent.class})
     public void newSkeleton(OnActivatedComponent event, EntityRef entity) {
@@ -64,5 +98,19 @@ public class MinecraftControllerSystem extends BaseComponentSystem {
         meshComponent.scale = component.scale;
         meshComponent.translate = component.translate;
         entity.addComponent(meshComponent);
+        models.put(entity, model);
+    }
+
+    @Override
+    public void update(float delta) {
+        for (EntityRef entity : entityManager.getEntitiesWith(SkeletalMeshComponent.class, LocationComponent.class, MinecraftControllerComponent.class)) {
+            SkeletalMeshComponent skeletalMesh = entity.getComponent(SkeletalMeshComponent.class);
+            MinecraftControllerComponent controller = entity.getComponent(MinecraftControllerComponent.class);
+            ModelBase model = models.get(entity);
+            if (model != null && skeletalMesh.boneEntities != null) {
+                model.setEntity(entity);
+                model.update(delta, time, walkspeed, data, yaw, pitch, scale);
+            }
+        }
     }
 }

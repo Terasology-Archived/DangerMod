@@ -28,7 +28,7 @@
         "modelClass" : "ModelAnt",
         "material" : "antSkin",
         "scale" : [0.1,-0.1,-0.1],
-        "translate" : [0,2.2,0]
+        "translate" : [0,2.5,0]
     }
 }
 

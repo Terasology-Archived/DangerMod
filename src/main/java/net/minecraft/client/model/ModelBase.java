@@ -20,11 +20,13 @@ import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import org.terasology.asset.AssetManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.assets.mesh.MeshBuilder;
 import org.terasology.rendering.assets.skeletalmesh.Bone;
 import org.terasology.rendering.assets.skeletalmesh.SkeletalMeshData;
 import org.terasology.rendering.assets.skeletalmesh.SkeletalMeshDataBuilder;
+import org.terasology.rendering.logic.SkeletalMeshComponent;
 
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector2f;
@@ -42,6 +44,8 @@ public class ModelBase { //implements SkeletalMeshController {
     private AssetManager assetManager;
     private SkeletalMeshDataBuilder builder;
     private Bone root;
+
+    private EntityRef entity;
 
     public ModelBase() {
         builder = new SkeletalMeshDataBuilder();
@@ -98,7 +102,16 @@ public class ModelBase { //implements SkeletalMeshController {
         bones.add(root);
     }
 
-    public void render(Entity entity, float time, float walkspeed, float data, float yaw, float pitch, float scale) {
+    public void setEntity(EntityRef entity) {
+        this.entity = entity;
+        SkeletalMeshComponent skeletalMesh = entity.getComponent(SkeletalMeshComponent.class);
+        for (ModelRenderer renderer : renderers) {
+            EntityRef bone = skeletalMesh.boneEntities.get(renderer.name);
+            renderer.setBoneEntity(bone);
+        }
+    }
+
+    public void render(Entity entity, float walkspeed, float time, float data, float yaw, float pitch, float scale) {
 
     }
 
@@ -108,6 +121,7 @@ public class ModelBase { //implements SkeletalMeshController {
     public Bone createBone(ModelRenderer renderer, Vector3f position, Quat4f rotation) {
         int id = bones.size();
         Bone bone = new Bone(id, "Box" + id, position, rotation);
+        renderer.name = bone.getName();
         bones.add(bone);
         builder.addBone(bone);
         root.addChild(bone);
@@ -129,29 +143,14 @@ public class ModelBase { //implements SkeletalMeshController {
         }
     }
 
-    //    @Override
-    public void update(EntityRef entity, float delta) {
-//        time += delta;
-//        float walkspeed = 1;
-//        float data = time;
-//        float yaw = 0;
-//        float pitch = 0;
-//        float scale = 1;
-//        render(null, time, walkspeed, data, yaw, pitch, scale);
-//
-//        SkeletalMeshComponent skeletalMeshComp = entity.getComponent(SkeletalMeshComponent.class);
-//
-//        for (ModelRenderer renderer : renderers) {
-//            EntityRef boneEntity = skeletalMeshComp.boneEntities.get(renderer.name);
-//            if (boneEntity == null) {
-//                continue;
-//            }
-//            LocationComponent boneLoc = boneEntity.getComponent(LocationComponent.class);
-//            if (boneLoc != null) {
-//                renderer.update(boneLoc, delta);
-//                boneEntity.saveComponent(boneLoc);
-//            }
-//        }
+    public void update(float delta, float time, float walkspeed, float data, float yaw, float pitch, float scale) {
+        render(null, time, walkspeed, data, yaw, pitch, scale);
+        Quat4f worldRot = new Quat4f(0, 0, 0, 1);
+        LocationComponent location = entity.getComponent(LocationComponent.class);
+        location.getWorldRotation(worldRot);
+        worldRot.inverse(worldRot);
+        for (ModelRenderer renderer : renderers) {
+            renderer.updateEntity(worldRot, delta);
+        }
     }
-
 }

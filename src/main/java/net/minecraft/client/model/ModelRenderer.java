@@ -17,6 +17,7 @@ package net.minecraft.client.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.Quat4fUtil;
 import org.terasology.rendering.assets.skeletalmesh.Bone;
@@ -47,6 +48,7 @@ public class ModelRenderer {
 
     private ModelBase model;
     private Bone bone;
+    private EntityRef boneEntity;
 
     public ModelRenderer(ModelBase model, int u, int v) {
         this.model = model;
@@ -56,6 +58,10 @@ public class ModelRenderer {
     }
 
     public void addBox(float x, float y, float z, int sizeX, int sizeY, int sizeZ) {
+        addBox(x, y, z, sizeX, sizeY, sizeZ, 0);
+    }
+
+    public void addBox(float x, float y, float z, int sizeX, int sizeY, int sizeZ, float scale) {
         Vector3f offset = new Vector3f(x, y, z);
         Vector3f size = new Vector3f(sizeX, sizeY, sizeZ);
         model.addBox(bone, offset, size, textureOffsetX, textureOffsetY);
@@ -77,19 +83,23 @@ public class ModelRenderer {
         bone.setObjectRotation(Quat4fUtil.fromAngles(rotateAngleX, rotateAngleY, rotateAngleZ));
     }
 
-    public void update(LocationComponent location, float delta) {
-//        Quat4f rot = Quat4fUtil.fromAngles(rotateAngleX, rotateAngleY, rotateAngleZ);
-//        Quat4f rot2 = new Quat4f(-rot.w, rot.z, -rot.y, rot.x);
-//        Quat4f old = location.getLocalRotation();
-//        rot.sub(rot2, old);
-//        float d = rot.x * rot.x + rot.y * rot.y + rot.z * rot.z + rot.w * rot.w;
-//        if (d > 0.5f) {
-//            logger.info(d + " before " + old + " after " + rot2);
-//        }
-//        location.setLocalRotation(rot2);
+    public void updateEntity(Quat4f invWorldRot, float delta) {
+        LocationComponent location = boneEntity.getComponent(LocationComponent.class);
+        Quat4f rot = Quat4fUtil.fromAngles(rotateAngleX, rotateAngleY, rotateAngleZ);
+        location.setLocalRotation(rot);
+        location.setLocalPosition(new Vector3f(rotationPointX, rotationPointY, rotationPointZ));
+        boneEntity.saveComponent(location);
     }
 
     public void render(float f5) {
 
+    }
+
+    public void setBoneEntity(EntityRef entity) {
+        this.boneEntity = entity;
+    }
+
+    public EntityRef getBoneEntity() {
+        return boneEntity;
     }
 }

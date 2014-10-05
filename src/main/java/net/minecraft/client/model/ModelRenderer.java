@@ -19,10 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.Quat4fUtil;
-import org.terasology.rendering.tcn.TCN;
+import org.terasology.rendering.assets.skeletalmesh.Bone;
 
 import javax.vecmath.Quat4f;
-import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 
 /**
@@ -46,18 +45,20 @@ public class ModelRenderer {
     public int textureOffsetX;
     public int textureOffsetY;
 
-    public Vector3f offset;
-    public Vector3f size;
+    private ModelBase model;
+    private Bone bone;
 
     public ModelRenderer(ModelBase model, int u, int v) {
-        model.addRenderer(this);
+        this.model = model;
+        bone = model.createBone(this, new Vector3f(), new Quat4f());
         textureOffsetX = u;
         textureOffsetY = v;
     }
 
     public void addBox(float x, float y, float z, int sizeX, int sizeY, int sizeZ) {
-        offset = new Vector3f(x, y, z);
-        size = new Vector3f(sizeX, sizeY, sizeZ);
+        Vector3f offset = new Vector3f(x, y, z);
+        Vector3f size = new Vector3f(sizeX, sizeY, sizeZ);
+        model.addBox(bone, offset, size, textureOffsetX, textureOffsetY);
     }
 
     public void setRotationPoint(float x, float y, float z) {
@@ -71,22 +72,24 @@ public class ModelRenderer {
         textureHeight = y;
     }
 
-    public void render(float f5) {
-    }
-
-    public TCN.Box build() {
-        return new TCN.Box(name, offset, new Vector3f(rotationPointX, rotationPointY, rotationPointZ), new Vector3f(rotateAngleX, rotateAngleY, rotateAngleZ), size, new Vector2f(textureOffsetX, textureOffsetY));
+    public void updateModel() {
+        bone.setObjectPos(new Vector3f(rotationPointX, rotationPointY, rotationPointZ));
+        bone.setObjectRotation(Quat4fUtil.fromAngles(rotateAngleX, rotateAngleY, rotateAngleZ));
     }
 
     public void update(LocationComponent location, float delta) {
-        Quat4f rot = Quat4fUtil.fromAngles(rotateAngleX, rotateAngleY, rotateAngleZ);
-        Quat4f rot2 = new Quat4f(-rot.w, rot.z, -rot.y, rot.x);
-        Quat4f old = location.getLocalRotation();
-        rot.sub(rot2, old);
-        float d = rot.x * rot.x + rot.y * rot.y + rot.z * rot.z + rot.w * rot.w;
-        if (d > 0.5f) {
-            logger.info(d + " before " + old + " after " + rot2);
-        }
-        location.setLocalRotation(rot2);
+//        Quat4f rot = Quat4fUtil.fromAngles(rotateAngleX, rotateAngleY, rotateAngleZ);
+//        Quat4f rot2 = new Quat4f(-rot.w, rot.z, -rot.y, rot.x);
+//        Quat4f old = location.getLocalRotation();
+//        rot.sub(rot2, old);
+//        float d = rot.x * rot.x + rot.y * rot.y + rot.z * rot.z + rot.w * rot.w;
+//        if (d > 0.5f) {
+//            logger.info(d + " before " + old + " after " + rot2);
+//        }
+//        location.setLocalRotation(rot2);
+    }
+
+    public void render(float f5) {
+
     }
 }

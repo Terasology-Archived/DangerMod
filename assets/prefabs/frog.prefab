@@ -24,11 +24,11 @@
         "footstepSounds" : ["FootGrass1", "FootGrass2", "FootGrass3", "FootGrass4", "FootGrass5"],
         "footstepVolume" : 0.7
     },
-    "skeletalmesh" : {
-        "controller" : "ModelFrog",
-        "heightOffset" : 0,
+    "minecraftcontroller" : {
+        "modelClass" : "ModelFrog",
         "material" : "frogSkin",
-        "translate" : [0,6.5,0]
+        "scale" : [0.1,-0.1,-0.1],
+        "translate" : [0,2.2,0]
     }
 }
 

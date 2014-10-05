@@ -48,7 +48,8 @@ public class ModelAlosaurus extends ModelBase {
     ModelRenderer rightleg4;
     ModelRenderer Shape17;
 
-    public ModelAlosaurus(float f1) {
+    public ModelAlosaurus() {
+        float f1 = 1;
         textureWidth = 128;
         textureHeight = 128;
         this.wingspeed = f1;
@@ -182,14 +183,14 @@ public class ModelAlosaurus extends ModelBase {
     }
 
     //f1 appears to be a scale of xyz motion.
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+    public void render(Entity entity, float time, float walkspeed, float data, float yaw, float pitch, float scale) {
 //        Alosaurus e = (Alosaurus)entity;
-        super.render(entity, f, f1, f2, f3, f4, f5);
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        super.render(entity, time, walkspeed, data, yaw, pitch, scale);
+        setRotationAngles(time, walkspeed, data, yaw, pitch, scale, entity);
         float newangle = 0;
         //System.out.printf("floats: %f,  %f, %f, %f, %f, %f\n", f, f1, f2, f3, f4, f5);
-        if (f1 > 0.1) {
-            newangle = MathHelper.cos(f2 * 1.3F * this.wingspeed) * (float) Math.PI * 0.25F * f1;
+        if (walkspeed > 0.1) {
+            newangle = MathHelper.cos(data * 1.3F * this.wingspeed) * (float) Math.PI * 0.25F * walkspeed;
         } else {
             newangle = 0.0F;
         }
@@ -205,35 +206,35 @@ public class ModelAlosaurus extends ModelBase {
         this.leftleg4.rotateAngleX = -newangle;
 
 //        if(e.getAttacking() != 0){
-        this.jaw.rotateAngleX = 0.520F + (MathHelper.cos(f2 * 0.45F) * (float) Math.PI * 0.18F);
+        this.jaw.rotateAngleX = 0.520F + (MathHelper.cos(data * 0.45F) * (float) Math.PI * 0.18F);
 //        }else{
 //            this.jaw.rotateAngleX = 0.1F;
 //        }
 
-        this.Shape17.rotateAngleX = -0.523F + (MathHelper.cos(f2 * 0.1F) * (float) Math.PI * 0.05F);
-        this.Shape11.rotateAngleX = -0.523F + (MathHelper.cos(f2 * 0.1F) * (float) Math.PI * 0.05F);
+        this.Shape17.rotateAngleX = -0.523F + (MathHelper.cos(data * 0.1F) * (float) Math.PI * 0.05F);
+        this.Shape11.rotateAngleX = -0.523F + (MathHelper.cos(data * 0.1F) * (float) Math.PI * 0.05F);
 
-        Shape18.render(f5);
-        Shape19.render(f5);
-        Shape20.render(f5);
-        Shape21.render(f5);
-        Shape1.render(f5);
-        Shape2.render(f5);
-        Shape3.render(f5);
-        Shape4.render(f5);
-        Shape5.render(f5);
-        Shape6.render(f5);
-        jaw.render(f5);
-        leftleg.render(f5);
-        leftleg2.render(f5);
-        leftleg3.render(f5);
-        Shape11.render(f5);
-        rightleg.render(f5);
-        rightleg2.render(f5);
-        rightleg3.render(f5);
-        leftleg4.render(f5);
-        rightleg4.render(f5);
-        Shape17.render(f5);
+        Shape18.render(scale);
+        Shape19.render(scale);
+        Shape20.render(scale);
+        Shape21.render(scale);
+        Shape1.render(scale);
+        Shape2.render(scale);
+        Shape3.render(scale);
+        Shape4.render(scale);
+        Shape5.render(scale);
+        Shape6.render(scale);
+        jaw.render(scale);
+        leftleg.render(scale);
+        leftleg2.render(scale);
+        leftleg3.render(scale);
+        Shape11.render(scale);
+        rightleg.render(scale);
+        rightleg2.render(scale);
+        rightleg3.render(scale);
+        leftleg4.render(scale);
+        rightleg4.render(scale);
+        Shape17.render(scale);
 
     }
 

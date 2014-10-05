@@ -25,11 +25,12 @@
         "footstepVolume" : 0.7
     },
     "skeletalmesh" : {
-        "mesh" : "alosaurus",
+        //"mesh" : "alosaurus",
         "heightOffset" : 0,
         "material" : "alosaurusSkin",
         "scale" : 0.5,
-        "translate" : [0,3,0]
+        "translate" : [0,3,0],
+        "controller" : "ModelAlosaurus"
     }
 }
 

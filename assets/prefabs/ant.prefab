@@ -25,7 +25,7 @@
         "footstepVolume" : 0.7
     },
     "skeletalmesh" : {
-        "mesh" : "ant",
+        "controller" : "ModelAnt",
         "heightOffset" : 0,
         "material" : "antSkin",
         "translate" : [0,6.4,0]

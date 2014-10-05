@@ -25,7 +25,7 @@
         "footstepVolume" : 0.7
     },
     "skeletalmesh" : {
-        "mesh" : "frog",
+        "controller" : "ModelFrog",
         "heightOffset" : 0,
         "material" : "frogSkin",
         "translate" : [0,6.5,0]

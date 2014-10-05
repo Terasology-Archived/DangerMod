@@ -30,6 +30,6 @@ public class Converter {
         model.updateModel();
         SkeletalMeshData meshData = model.getMeshData();
         System.setOut(new PrintStream(new FileOutputStream("x.md5mesh")));
-        System.out.println(meshData.toString());
+        System.out.println(meshData.toMD5(""));
     }
 }

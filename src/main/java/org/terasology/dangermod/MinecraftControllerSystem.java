@@ -59,30 +59,31 @@ public class MinecraftControllerSystem extends BaseComponentSystem implements Up
     public void newSkeleton(OnActivatedComponent event, EntityRef entity) {
         MinecraftControllerComponent component = entity.getComponent(MinecraftControllerComponent.class);
         ModelBase model = null;
-        switch (component.modelClass) {
-            case "ModelAlosaurus":
-                model = new ModelAlosaurus();
-                break;
-            case "ModelFrog":
-                model = new ModelFrog();
-                break;
-            case "ModelAnt":
-                model = new ModelAnt();
-                break;
+        try {
+            Class<?> modelAlosaurus = Class.forName("org.terasology.dangermod." + component.modelClass);
+            model = (ModelBase) modelAlosaurus.newInstance();
+            model.updateModel();
+            CoreRegistry.get(DebugPropertiesSystem.class).addProperty(entity.toString(), model);
+            SkeletalMeshData data = model.getMeshData();
+
+            entity.removeComponent(SkeletalMeshComponent.class);
+            SkeletalMeshComponent meshComponent = new SkeletalMeshComponent();
+
+            meshComponent.mesh = (SkeletalMesh) assetManager.generateAsset(new AssetUri(AssetType.SKELETON_MESH, "DangerMod:" + model.getClass().getSimpleName()), data);
+            meshComponent.material = component.material;
+            meshComponent.scale = component.scale;
+            meshComponent.translate = component.translate;
+            meshComponent.heightOffset = component.heightOffset;
+            entity.addComponent(meshComponent);
+            models.put(entity, model);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
 
-        model.updateModel();
-        CoreRegistry.get(DebugPropertiesSystem.class).addProperty(entity.toString(), model);
-        SkeletalMeshData data = model.getMeshData();
-        SkeletalMeshComponent meshComponent = new SkeletalMeshComponent();
-
-        meshComponent.mesh = (SkeletalMesh) assetManager.generateAsset(new AssetUri(AssetType.SKELETON_MESH, "DangerMod:" + model.getClass().getSimpleName()), data);
-        meshComponent.material = component.material;
-        meshComponent.scale = component.scale;
-        meshComponent.translate = component.translate;
-        meshComponent.heightOffset = component.heightOffset;
-        entity.addComponent(meshComponent);
-        models.put(entity, model);
     }
 
     @Override

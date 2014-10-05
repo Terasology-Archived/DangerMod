@@ -38,7 +38,7 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 import java.util.List;
 
-public class ModelBase { //implements SkeletalMeshController {
+public class ModelBase {
     private final Logger logger = LoggerFactory.getLogger(ModelBase.class);
     public int textureWidth;
     public int textureHeight;

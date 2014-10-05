@@ -28,5 +28,6 @@ public class MinecraftControllerComponent implements Component {
     public Material material;
     public Vector3f scale = new Vector3f(1, 1, 1);
     public Vector3f translate = new Vector3f();
+    public float heightOffset;
 
 }

@@ -18,8 +18,11 @@ package net.minecraft.client.model;
 
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.asset.AssetManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.logic.characters.CharacterMoveInputEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.assets.mesh.MeshBuilder;
@@ -27,6 +30,8 @@ import org.terasology.rendering.assets.skeletalmesh.Bone;
 import org.terasology.rendering.assets.skeletalmesh.SkeletalMeshData;
 import org.terasology.rendering.assets.skeletalmesh.SkeletalMeshDataBuilder;
 import org.terasology.rendering.logic.SkeletalMeshComponent;
+import org.terasology.rendering.nui.properties.OneOf;
+import org.terasology.rendering.nui.properties.Range;
 
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector2f;
@@ -34,6 +39,7 @@ import javax.vecmath.Vector3f;
 import java.util.List;
 
 public class ModelBase { //implements SkeletalMeshController {
+    private final Logger logger = LoggerFactory.getLogger(ModelBase.class);
     public int textureWidth;
     public int textureHeight;
 
@@ -46,6 +52,52 @@ public class ModelBase { //implements SkeletalMeshController {
     private Bone root;
 
     private EntityRef entity;
+
+    @Range(min = 0, max = 40, precision = 1)
+    private float rdata;
+    @Range(min = 0, max = 40, precision = 1)
+    private float rtime;
+    @Range(min = 0, max = 1, precision = 3)
+    private float rwalkspeed;
+
+    @Range(min = 0, max = 360, precision = 1)
+    private float ryaw;
+    @Range(min = 0, max = 360, precision = 1)
+    private float rpitch;
+    @Range(min = 0, max = 360, precision = 1)
+    private float myaw;
+    @Range(min = 0, max = 360, precision = 1)
+    private float mpitch;
+    @Range
+    private float scale;
+
+    public enum Target {
+        OFF, DATA, TIME, WALKSPEED, YAW, PITCH, SCALE
+    }
+
+    public enum Form {
+        SAW, WAVE
+    }
+
+    @OneOf.Enum
+    private Target lfo1Target = Target.OFF;
+    @OneOf.Enum
+    private Form lfo1Form;
+    @Range(min = -3, max = 3, precision = 3)
+    private float lfo1Speed;
+    @Range(min = 0, max = 40, precision = 1)
+    private float lfo1Max;
+    private float lfo1Time;
+
+    @OneOf.Enum
+    private Target lfo2Target = Target.OFF;
+    @OneOf.Enum
+    private Form lfo2Form;
+    @Range(min = -3, max = 3, precision = 3)
+    private float lfo2Speed;
+    @Range(min = 0, max = 40, precision = 1)
+    private float lfo2Max;
+    private float lfo2Time;
 
     public ModelBase() {
         builder = new SkeletalMeshDataBuilder();
@@ -143,8 +195,48 @@ public class ModelBase { //implements SkeletalMeshController {
         }
     }
 
-    public void update(float delta, float time, float walkspeed, float data, float yaw, float pitch, float scale) {
-        render(null, time, walkspeed, data, yaw, pitch, scale);
+    private float getLfo(Form form, float speed, float max, float time) {
+        switch (form) {
+            case SAW:
+                return (speed * time) % max;
+            case WAVE:
+                return (float) Math.cos(speed * time) * max / 2 + max / 2;
+        }
+        return 0;
+    }
+
+    private void applyLfo(Target target, Form form, float speed, float max, float time) {
+        if (target != Target.OFF && form != null) {
+            float value = getLfo(form, speed, max, time);
+            switch (target) {
+                case DATA:
+                    rdata = value;
+                    break;
+                case TIME:
+                    rtime = value;
+                    break;
+                case WALKSPEED:
+                    rwalkspeed = value;
+                    break;
+                case YAW:
+                    ryaw = value;
+                    break;
+                case PITCH:
+                    rpitch = value;
+                    break;
+                case SCALE:
+                    scale = value;
+                    break;
+            }
+        }
+    }
+
+    public void update(float delta) {
+        applyLfo(lfo1Target, lfo1Form, lfo1Speed, lfo1Max, lfo1Time);
+        applyLfo(lfo2Target, lfo2Form, lfo2Speed, lfo2Max, lfo2Time);
+        lfo1Time += delta;
+        lfo2Time += delta;
+        render(null, rdata, rwalkspeed, rtime, ryaw, rpitch, scale);
         Quat4f worldRot = new Quat4f(0, 0, 0, 1);
         LocationComponent location = entity.getComponent(LocationComponent.class);
         location.getWorldRotation(worldRot);
@@ -152,5 +244,6 @@ public class ModelBase { //implements SkeletalMeshController {
         for (ModelRenderer renderer : renderers) {
             renderer.updateEntity(worldRot, delta);
         }
+        entity.send(new CharacterMoveInputEvent(0, mpitch, myaw, new Vector3f(), false, false));
     }
 }

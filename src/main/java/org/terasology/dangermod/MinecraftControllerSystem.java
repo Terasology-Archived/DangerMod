@@ -34,8 +34,6 @@ import org.terasology.registry.In;
 import org.terasology.rendering.assets.skeletalmesh.SkeletalMesh;
 import org.terasology.rendering.assets.skeletalmesh.SkeletalMeshData;
 import org.terasology.rendering.logic.SkeletalMeshComponent;
-import org.terasology.rendering.nui.layouts.PropertyLayout;
-import org.terasology.rendering.nui.properties.Range;
 
 import java.util.Map;
 
@@ -51,22 +49,6 @@ public class MinecraftControllerSystem extends BaseComponentSystem implements Up
     EntityManager entityManager;
 
     private Map<EntityRef, ModelBase> models = Maps.newHashMap();
-
-    private PropertyLayout properties;
-
-    @Range(min = 0, max = 40, precision = 1)
-    private float time;
-    @Range(min = 0, max = 1, precision = 3)
-    private float walkspeed;
-    @Range(min = 0, max = 40, precision = 1)
-    private float data;
-
-    @Range(min = 0, max = 360, precision = 1)
-    private float yaw;
-    @Range(min = 0, max = 360, precision = 1)
-    private float pitch;
-    @Range
-    private float scale;
 
     @Override
     public void preBegin() {
@@ -90,6 +72,7 @@ public class MinecraftControllerSystem extends BaseComponentSystem implements Up
         }
 
         model.updateModel();
+        CoreRegistry.get(DebugPropertiesSystem.class).addProperty(entity.toString(), model);
         SkeletalMeshData data = model.getMeshData();
         SkeletalMeshComponent meshComponent = new SkeletalMeshComponent();
 
@@ -97,6 +80,7 @@ public class MinecraftControllerSystem extends BaseComponentSystem implements Up
         meshComponent.material = component.material;
         meshComponent.scale = component.scale;
         meshComponent.translate = component.translate;
+        meshComponent.heightOffset = component.heightOffset;
         entity.addComponent(meshComponent);
         models.put(entity, model);
     }
@@ -109,7 +93,7 @@ public class MinecraftControllerSystem extends BaseComponentSystem implements Up
             ModelBase model = models.get(entity);
             if (model != null && skeletalMesh.boneEntities != null) {
                 model.setEntity(entity);
-                model.update(delta, time, walkspeed, data, yaw, pitch, scale);
+                model.update(delta);
             }
         }
     }

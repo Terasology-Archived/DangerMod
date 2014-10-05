@@ -28,6 +28,7 @@
         "modelClass" : "ModelFrog",
         "material" : "frogSkin",
         "scale" : [0.1,-0.1,-0.1],
+        "heightOffset" : -0.8,
         "translate" : [0,2.5,0]
     }
 }

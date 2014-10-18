@@ -22,4 +22,8 @@ public class MathHelper {
     public static float cos(float v) {
         return (float) Math.cos(v);
     }
+
+    public static float sin(float v) {
+        return (float) Math.sin(v);
+    }
 }

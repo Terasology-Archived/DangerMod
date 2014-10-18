@@ -62,8 +62,8 @@ public class ModelRenderer {
     }
 
     public void addBox(float x, float y, float z, int sizeX, int sizeY, int sizeZ, float scale) {
-        Vector3f offset = new Vector3f(x, y, z);
-        Vector3f size = new Vector3f(sizeX, sizeY, sizeZ);
+        Vector3f offset = new Vector3f(x-scale, y-scale, z-scale);
+        Vector3f size = new Vector3f(sizeX+scale*2, sizeY+scale*2, sizeZ+scale*2);
         model.addBox(bone, offset, size, textureOffsetX, textureOffsetY);
     }
 
@@ -84,15 +84,15 @@ public class ModelRenderer {
     }
 
     public void updateEntity(Quat4f invWorldRot, float delta) {
+    }
+
+    public void render(float f5) {
         LocationComponent location = boneEntity.getComponent(LocationComponent.class);
         Quat4f rot = Quat4fUtil.fromAngles(rotateAngleX, rotateAngleY, rotateAngleZ);
         location.setLocalRotation(rot);
         location.setLocalPosition(new Vector3f(rotationPointX, rotationPointY, rotationPointZ));
+        location.setLocalScale(f5);
         boneEntity.saveComponent(location);
-    }
-
-    public void render(float f5) {
-
     }
 
     public void setBoneEntity(EntityRef entity) {

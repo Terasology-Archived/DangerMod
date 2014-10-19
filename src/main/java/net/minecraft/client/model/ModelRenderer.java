@@ -62,8 +62,8 @@ public class ModelRenderer {
     }
 
     public void addBox(float x, float y, float z, int sizeX, int sizeY, int sizeZ, float scale) {
-        Vector3f offset = new Vector3f(x-scale, y-scale, z-scale);
-        Vector3f size = new Vector3f(sizeX+scale*2, sizeY+scale*2, sizeZ+scale*2);
+        Vector3f offset = new Vector3f(x - scale, y - scale, z - scale);
+        Vector3f size = new Vector3f(sizeX + scale * 2, sizeY + scale * 2, sizeZ + scale * 2);
         model.addBox(bone, offset, size, textureOffsetX, textureOffsetY);
     }
 

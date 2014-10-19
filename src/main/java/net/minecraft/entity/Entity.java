@@ -17,4 +17,13 @@ package net.minecraft.entity;
 
 public interface Entity {
 
+    int getActivity();
+
+    int getAttacking();
+
+    boolean isSitting();
+
+    float getHead1Ext();
+    float getHead2Ext();
+    float getHead3Ext();
 }

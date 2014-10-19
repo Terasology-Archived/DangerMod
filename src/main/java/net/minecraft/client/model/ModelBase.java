@@ -236,7 +236,37 @@ public class ModelBase {
         applyLfo(lfo2Target, lfo2Form, lfo2Speed, lfo2Max, lfo2Time);
         lfo1Time += delta;
         lfo2Time += delta;
-        render(null, rdata, rwalkspeed, rtime, ryaw, rpitch, scale);
+        render(new Entity() {
+            @Override
+            public int getActivity() {
+                return 0;
+            }
+
+            @Override
+            public int getAttacking() {
+                return 0;
+            }
+
+            @Override
+            public boolean isSitting() {
+                return false;
+            }
+
+            @Override
+            public float getHead1Ext() {
+                return 0;
+            }
+
+            @Override
+            public float getHead2Ext() {
+                return 0;
+            }
+
+            @Override
+            public float getHead3Ext() {
+                return 0;
+            }
+        }, rdata, rwalkspeed, rtime, ryaw, rpitch, scale);
         Quat4f worldRot = new Quat4f(0, 0, 0, 1);
         LocationComponent location = entity.getComponent(LocationComponent.class);
         location.getWorldRotation(worldRot);

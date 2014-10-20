@@ -9,7 +9,7 @@
     	sounds = "engine:click"
   	},
   	"SpawnTool" : {
-        prefabs = ["theprince", "redpawn", "killerbunny", "ant", "frog", "alosaurus"],
+        prefabs = ["butterfly", "crab", "rat", "ant", "frog"],
         spawn = 1,
         max = 10
   	}

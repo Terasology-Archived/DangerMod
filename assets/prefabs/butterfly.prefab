@@ -25,11 +25,11 @@
         "footstepVolume" : 0.7
     },
     "minecraftcontroller" : {
-        "material" : "alosaurusSkin",
+        "modelClass" : "ModelButterfly",
+        "material" : "butterflySkin",
         "scale" : [0.1,-0.1,-0.1],
-        "translate" : [0,2.5,0],
         "heightOffset" : -0.8,
-        "modelClass" : "ModelAlosaurus"
+        "translate" : [0,2.5,0]
     }
 }
 

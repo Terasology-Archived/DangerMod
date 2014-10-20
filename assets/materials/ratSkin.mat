@@ -2,7 +2,7 @@
 {
     "shader" : "engine:genericMeshMaterial",
     "params" : {
-        "diffuse" : "theprincetexture",
+        "diffuse" : "rattexture",
         "colorOffset" : [1.0, 1.0, 1.0],
         "textured" : true
     }

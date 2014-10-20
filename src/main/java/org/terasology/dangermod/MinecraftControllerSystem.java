@@ -60,8 +60,8 @@ public class MinecraftControllerSystem extends BaseComponentSystem implements Up
         MinecraftControllerComponent component = entity.getComponent(MinecraftControllerComponent.class);
         ModelBase model = null;
         try {
-            Class<?> modelAlosaurus = Class.forName("org.terasology.dangermod." + component.modelClass);
-            model = (ModelBase) modelAlosaurus.newInstance();
+            Class<?> modelClass = Class.forName("org.terasology.dangermod.models." + component.modelClass);
+            model = (ModelBase) modelClass.newInstance();
             model.updateModel();
             CoreRegistry.get(DebugPropertiesSystem.class).addProperty(entity.toString(), model);
             SkeletalMeshData data = model.getMeshData();

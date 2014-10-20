@@ -25,11 +25,11 @@
         "footstepVolume" : 0.7
     },
     "minecraftcontroller" : {
-        "material" : "theprinceSkin",
-        "scale" : [0.1,-0.1,-0.1],
-        "translate" : [0,2.5,0],
+        "modelClass" : "ModelCrab",
+        "material" : "crabSkin",
+        "scale" : [0.01,-0.01,-0.01],
         "heightOffset" : -0.8,
-        "modelClass" : "ModelThePrince"
+        "translate" : [0,0.3,0]
     }
 }
 

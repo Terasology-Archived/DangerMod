@@ -24,12 +24,12 @@
         "footstepSounds" : ["FootGrass1", "FootGrass2", "FootGrass3", "FootGrass4", "FootGrass5"],
         "footstepVolume" : 0.7
     },
-    "skeletalmesh" : {
-        "mesh" : "killerbunny",
-        "material" : "killerbunnySkin",
-        "scale" : [1,1,1],
-        "heightOffset" : -1,
-        "translate" : [0,1,0]
+    "minecraftcontroller" : {
+        "modelClass" : "ModelRat",
+        "material" : "ratSkin",
+        "scale" : [0.1,-0.1,-0.1],
+        "heightOffset" : -0.8,
+        "translate" : [0,2.5,0]
     }
 }
 

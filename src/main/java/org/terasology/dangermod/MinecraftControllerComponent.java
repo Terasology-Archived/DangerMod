@@ -16,9 +16,8 @@
 package org.terasology.dangermod;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.math.geom.Vector3f;
 import org.terasology.rendering.assets.material.Material;
-
-import javax.vecmath.Vector3f;
 
 /**
  * @author synopia

@@ -19,11 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.Quat4fUtil;
+import org.terasology.math.geom.Quat4f;
+import org.terasology.math.geom.Vector3f;
 import org.terasology.rendering.assets.skeletalmesh.Bone;
-
-import javax.vecmath.Quat4f;
-import javax.vecmath.Vector3f;
 
 /**
  * @author synopia
@@ -80,7 +78,7 @@ public class ModelRenderer {
 
     public void updateModel() {
         bone.setObjectPos(new Vector3f(rotationPointX, rotationPointY, rotationPointZ));
-        bone.setObjectRotation(Quat4fUtil.fromAngles(rotateAngleX, rotateAngleY, rotateAngleZ));
+        bone.setObjectRotation(new Quat4f(rotateAngleX, rotateAngleY, rotateAngleZ));
     }
 
     public void updateEntity(Quat4f invWorldRot, float delta) {
@@ -88,7 +86,7 @@ public class ModelRenderer {
 
     public void render(float f5) {
         LocationComponent location = boneEntity.getComponent(LocationComponent.class);
-        Quat4f rot = Quat4fUtil.fromAngles(rotateAngleX, rotateAngleY, rotateAngleZ);
+        Quat4f rot = new Quat4f(rotateAngleX, rotateAngleY, rotateAngleZ);
         location.setLocalRotation(rot);
         location.setLocalPosition(new Vector3f(rotationPointX, rotationPointY, rotationPointZ));
         location.setLocalScale(f5);

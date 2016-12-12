@@ -1,9 +1,9 @@
 {
     "id" : "DangerMod",
     "version" : "0.1.0",
-    "author" : "",
+    "author" : "synopia",
     "displayName" : "DangerMod",
-    "description" : "",
+    "description" : "Used to support OreSpawn content from TheyCallMeDanger in Terasology",
     "dependencies" : [],
     "isServerSideOnly" : false
 }
